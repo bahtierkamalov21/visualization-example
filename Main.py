@@ -1,29 +1,32 @@
 import tkinter as tk
-from tkinter import Label
-
-# Импорт компонентов
+import pandas as pd
+from tkinter import *
 
 
 class Main(tk.Tk):
     def __init__(self):
         super().__init__()
-        # Создания title приложения
         self.title("Визуализация Python")
-        self.add_frames()
+        w = self.winfo_screenwidth()
+        h = self.winfo_screenheight()
+        w = w - 100
+        h = h - 85
+        self.geometry("{}x{}+42+2".format(w, h))
 
-    def add_frames(self):
-        self.drawer = Drawer(self)
 
-
-class Drawer(tk.Frame):
-    def __init__(self, master):
-        super().__init__(master)
-        self.pack()
-
-        self.drawer = Label(text="cascacasc")
-        self.drawer.pack()
-
+class FrameDrawer(tk.Frame):
+    def __init__(self, master, options):
+        super().__init__(master, options)
+        self.grid(row=0, column=0)
+        
+        self.label = Label(text="Общая статистика", bg="#fff", pady=10, padx=10)
+        self.label.grid(row=0, column=0)
+        
 
 if __name__ == "__main__":
-    main = Main()
-    main.mainloop()
+    root = Main()
+
+    # Фреймы
+    frame_drawer = FrameDrawer(root, options={"width":root.winfo_screenwidth() // 2, "height":root.winfo_screenheight(), "bg":"black"})
+
+    root.mainloop()
