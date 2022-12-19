@@ -27,8 +27,11 @@ class Main(tk.Tk):
         self.frame_right_top = FrameRightTop(self, self.reqwidth_frame_drawer)
         self.frame_right_bottom = FrameRightBottom(
             self, self.reqwidth_frame_drawer)
+        
         # Вызов графика
         self.frame_drawer.graph(open=True)
+        self.frame_right_top.graph(open=True)
+        self.frame_right_bottom.graph(open=True)
 
 
 class FrameDrawer(ttk.Frame):
@@ -60,29 +63,32 @@ class FrameDrawer(ttk.Frame):
             activebackground="#333", activeforeground="#fff",
             relief="groove",  command=self.graph
         )
-        self.buttonCheckInNotebook.place(y=self.winfo_reqheight() - 170, x=20)
+        self.buttonCheckInNotebook.place(y=self.winfo_reqheight() - 140, x=20)
 
     # Метод открытия и рендеринга графика
     def graph(self, open=False):
         self.open = open
-        self.fig, self.ax = plt.subplots(
-            figsize=(4.8, 5), layout='constrained')
-        self.ax.set_title("График в виде Plot")
-        # Первый аргумент предмет, второй оценка
-        days = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница"]
-        self.ax.plot(days, [5, 5, 4, 5, 0], label='Математика')
-        self.ax.plot(days, [4, 4, 4, 4, 0], label='Русский язык')
-        self.ax.plot(days, [4, 5, 4, 5, 0], label='Казахский язык')
-        self.ax.plot(days, [5, 5, 5, 4, 5], label='Информатика')
-        self.ax.set_xlabel('Дни недели')
-        self.ax.set_ylabel('Оценки')
-        self.ax.legend()
+        
+        # Данные
+        days = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница"] # Первый аргумент предмет, второй оценка
+        
+        fig, ax = plt.subplots(
+            figsize=(4.8, 5.2), layout='constrained')
+        ax.set_title("График в виде Plot")
+        ax.plot(days, [5, 5, 4, 5, 0], label='Математика')
+        ax.plot(days, [4, 4, 4, 4, 0], label='Русский язык')
+        ax.plot(days, [4, 5, 4, 5, 0], label='Казахский язык')
+        ax.plot(days, [5, 5, 5, 4, 5], label='Информатика')
+        ax.set_xlabel('Дни недели')
+        ax.set_ylabel('Оценки')
+        ax.legend()
+        
         if not self.open:
-            plt.show()
+            fig.show()
         else:
-            canvas = FigureCanvasTkAgg(self.fig, self)
+            canvas = FigureCanvasTkAgg(fig, self)
             canvas.draw()
-            canvas.get_tk_widget().place(y=80, x=5)
+            canvas.get_tk_widget().place(y=85, x=5)
 
     def get_req_width(self):
         return self.winfo_reqwidth()
@@ -100,10 +106,41 @@ class FrameRightTop(ttk.Frame):
         self['height'] = self.winfo_screenheight() // 2
         self['borderwidth'] = 1
         self['relief'] = 'raised'
+        self['padding'] = 5
         self['style'] = "RightTop.TFrame"
+        
+        # Данные
+        self.days = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница"]
+        self.students = [20, 23, 27, 16, 18]
 
         # Упаковка
         self.place(x=reqwidth)
+        
+        # Компоненты
+        self.buttonCheckInNotebook = Button(
+            self, width=50,
+            padx=20, pady=10, text="Открыть график в графическом окне matplotlib",
+            font=16, fg="white", bg="#4f46e5",
+            activebackground="#333", activeforeground="#fff",
+            relief="groove",  command=self.graph
+        )
+        self.buttonCheckInNotebook.place(y=312, x=10)
+        
+    def graph(self, open=False):
+        self.open = open
+        
+        fig, ax = plt.subplots(figsize=(6, 2.8), layout='constrained')
+        ax.set_title("Колличество учеников посещавших колледж | Bar")
+        ax.set_xlabel("Ученики")
+        ax.set_ylabel("Дни недели")
+        ax.bar(self.days, self.students)
+        
+        if not self.open:
+            fig.show()
+        else:
+            canvas = FigureCanvasTkAgg(fig, self)
+            canvas.draw()
+            canvas.get_tk_widget().place(x=10, y=20)
 
 
 class FrameRightBottom(ttk.Frame):
@@ -118,10 +155,30 @@ class FrameRightBottom(ttk.Frame):
         self['height'] = self.winfo_screenheight() // 2
         self['borderwidth'] = 1
         self['relief'] = 'groove'
+        self['padding'] = 5
         self['style'] = "RightBottom.TFrame"
+        
+        # Данные
+        self.days = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница"]
+        self.students = [20, 23, 27, 16, 18]
+        map(float(), self.students) # Преобразование данных массива в float
 
         # Упаковка
         self.place(x=reqwidth, y=self.winfo_screenheight() // 2)
+        
+    def graph(self, open=False):
+        self.open = open
+        
+        fig, ax = plt.subplots(figsize=(5, 2.8), layout='constrained')
+        ax.set_title("Колличество учеников посещавших колледж | Pie")
+        ax.pie(self.students, labels=self.days)
+        
+        if not self.open:
+            fig.show()
+        else:
+            canvas = FigureCanvasTkAgg(fig, self)
+            canvas.draw()
+            canvas.get_tk_widget().place(x=10, y=15)
 
 
 if __name__ == "__main__":

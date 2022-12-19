@@ -1,1 +1,5 @@
-https://coderslegacy.com/figurecanvastkagg-matplotlib-tkinter/
+Литература
+tkinter https://coderslegacy.com/figurecanvastkagg-matplotlib-tkinter/
+matpotlib https://matplotlib.org/stable/index.html
+Bar https://jenyay.net/Matplotlib/Bar
+Pie https://jenyay.net/Matplotlib/Pie
